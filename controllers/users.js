@@ -7,16 +7,14 @@ const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const AuthError = require('../errors/AuthError');
 const ConflictError = require('../errors/ConflictError');
-
-const saltRounds = 10;
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { SALT, JWT_SECRET } = require('../utils/config');
 
 module.exports.createUser = (req, res, next) => {
   const {
     email, password, name,
   } = req.body;
 
-  bcrypt.hash(password, saltRounds)
+  bcrypt.hash(password, SALT)
     .then((hash) => {
       User.create({
         name,
@@ -52,7 +50,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        JWT_SECRET,
         { expiresIn: '7d' },
       );
       res.send({ token });
@@ -60,12 +58,6 @@ module.exports.login = (req, res, next) => {
     .catch(() => {
       next(new AuthError('Неправильные почта или пароль'));
     });
-};
-
-module.exports.getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => res.send(users))
-    .catch(next);
 };
 
 module.exports.getCurrentUser = (req, res, next) => {

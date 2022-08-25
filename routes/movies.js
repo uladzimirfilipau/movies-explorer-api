@@ -11,8 +11,11 @@ const {
   validateCreateMovie,
 } = require('../middlewares/validate');
 
-router.get('/', getMovies); // возвращает все сохранённые текущим пользователем фильмы
-router.post('/', validateCreateMovie, createMovie); // создаёт фильм
-router.patch('/:movieId', validateMovieId, deleteMovie); // удаляет сохранённый фильм по id
+// вернуть все сохранённые текущим пользователем фильмы
+router.get('/', getMovies);
+// создать фильм
+router.post('/', validateCreateMovie, createMovie);
+// удалить сохранённый фильм по id
+router.patch('/:movieId', validateMovieId, deleteMovie);
 
 module.exports = router;

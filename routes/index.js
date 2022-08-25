@@ -15,7 +15,7 @@ router.use('/users', userRouter);
 router.use('/movies', movieRouter);
 
 router.use((req, res, next) => {
-  next(new NotFoundError('Страница не найдена'));
+  next(new NotFoundError('Страница по указанному маршруту не найдена'));
 });
 
 module.exports = router;

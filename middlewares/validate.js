@@ -5,7 +5,7 @@ module.exports.validateCreateUser = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
   }),
 });
 
@@ -25,7 +25,7 @@ module.exports.validateUserId = celebrate({
 module.exports.validateUserInfo = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
   }),
 });
 
@@ -39,10 +39,9 @@ module.exports.validateCreateMovie = celebrate({
     image: Joi.string().required().regex(url),
     trailerLink: Joi.string().required().regex(url),
     thumbnail: Joi.string().required().regex(url),
-    owner: Joi.string().alphanum().length(24).hex(),
-    movieId: Joi.string().alphanum().length(24).hex(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
+    movieId: Joi.number().required(),
   }),
 });
 

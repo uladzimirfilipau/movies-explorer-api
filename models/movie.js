@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const { isUrl } = require('validator');
+const isUrl = require('validator/lib/isURL');
 
 const movieSchema = new Schema(
   {
@@ -26,26 +26,17 @@ const movieSchema = new Schema(
     image: {
       type: String,
       required: true,
-      validate: {
-        validator: (v) => isUrl(v),
-        message: 'Некорректный формат ссылки',
-      },
+      validate: [isUrl, 'Неверный формат ссылки'],
     },
     trailerLink: {
       type: String,
       required: true,
-      validate: {
-        validator: (v) => isUrl(v),
-        message: 'Некорректный формат ссылки',
-      },
+      validate: [isUrl, 'Неверный формат ссылки'],
     },
     thumbnail: {
       type: String,
       required: true,
-      validate: {
-        validator: (v) => isUrl(v),
-        message: 'Некорректный формат ссылки',
-      },
+      validate: [isUrl, 'Неверный формат ссылки'],
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -53,8 +44,7 @@ const movieSchema = new Schema(
       required: true,
     },
     movieId: {
-      type: Schema.Types.ObjectId,
-      ref: 'movie',
+      type: Number,
       required: true,
     },
     nameRU: {
