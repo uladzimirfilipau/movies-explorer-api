@@ -72,4 +72,4 @@ Mongo DB
 
 ## Ссылки
 Публичный IP-адрес сервера: `158.160.5.222`  
-Домен, по которому можно обратиться к серверу https://api.movies-explorer.vova.nomoredomains.sbs/  
+Домен, по которому можно обратиться к серверу https://api.moviesexplorer.vova.nomoredomains.sbs/  
