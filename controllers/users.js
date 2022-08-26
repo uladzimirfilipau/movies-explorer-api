@@ -7,6 +7,13 @@ const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const AuthError = require('../errors/AuthError');
 const ConflictError = require('../errors/ConflictError');
+const {
+  CONFLICT_ERR_MESSAGE,
+  BAD_REQ_ERR_MESSAGE,
+  WRONG_DATA_ERR_MESSAGE,
+  USER_NOT_FOUND_ERR_MESSAGE,
+  NOT_UPDATE_ERR_MESSAGE,
+} = require('../utils/const');
 const { SALT, JWT_SECRET } = require('../utils/config');
 
 module.exports.createUser = (req, res, next) => {
@@ -28,13 +35,9 @@ module.exports.createUser = (req, res, next) => {
         }))
         .catch((err) => {
           if (err.code === 11000) {
-            next(new ConflictError('Пользователь с таким email уже существует'));
+            next(new ConflictError(CONFLICT_ERR_MESSAGE));
           } else if (err.name === 'ValidationError') {
-            next(
-              new BadRequestError(
-                'Переданы некорректные данные для создания профиля пользователя',
-              ),
-            );
+            next(new BadRequestError(BAD_REQ_ERR_MESSAGE));
           } else {
             next(err);
           }
@@ -56,13 +59,13 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch(() => {
-      next(new AuthError('Неправильные почта или пароль'));
+      next(new AuthError(WRONG_DATA_ERR_MESSAGE));
     });
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => next(new NotFoundError('Пользователь по указанному _id не найден')))
+    .orFail(() => next(new NotFoundError(USER_NOT_FOUND_ERR_MESSAGE)))
     .then((user) => res.send(user))
     .catch(next);
 };
@@ -71,11 +74,13 @@ module.exports.updateUserInfo = (req, res, next) => {
   const { name, email } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
-    .orFail(() => next(new NotFoundError('Пользователь по указанному _id не найден')))
+    .orFail(() => next(new NotFoundError(USER_NOT_FOUND_ERR_MESSAGE)))
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные для обновления профиля пользователя'));
+      if (err.code === 11000) {
+        next(new ConflictError(CONFLICT_ERR_MESSAGE));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequestError(NOT_UPDATE_ERR_MESSAGE));
       } else {
         next(err);
       }

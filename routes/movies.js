@@ -16,6 +16,6 @@ router.get('/', getMovies);
 // создать фильм
 router.post('/', validateCreateMovie, createMovie);
 // удалить сохранённый фильм по id
-router.patch('/:movieId', validateMovieId, deleteMovie);
+router.delete('/:movieId', validateMovieId, deleteMovie);
 
 module.exports = router;

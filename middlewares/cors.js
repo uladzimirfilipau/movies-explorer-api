@@ -1,11 +1,10 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  // 'https://vladimirfilippov.students.nomoredomains.sbs',
-  // 'http://vladimirfilippov.students.nomoredomains.sbs',
+  'https://moviesexplorer.vova.nomoredomains.sbs',
+  'http://moviesexplorer.vova.nomoredomains.sbs',
   'http://localhost:3000',
 ];
 
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   // Сохраняем источник запроса в переменную origin
   const { origin } = req.headers;
@@ -19,7 +18,7 @@ module.exports = (req, res, next) => {
   // проверяем, что источник запроса есть среди разрешённых
   if (allowedCors.includes(origin)) {
     // устанавливаем заголовок, который разрешает браузеру запросы с этого источника
-    res.header('Access-Control-Allow-Origin', origin);
+    return res.header('Access-Control-Allow-Origin', origin);
   }
 
   if (method === 'OPTIONS') {
@@ -31,5 +30,5 @@ module.exports = (req, res, next) => {
     return res.end();
   }
 
-  next();
+  return next();
 };

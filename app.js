@@ -34,7 +34,4 @@ mongoose.connect(MONGODB, {
   useFindAndModify: false,
 });
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server listen port: ${PORT}`);
-});
+app.listen(PORT);
