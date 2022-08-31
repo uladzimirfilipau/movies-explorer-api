@@ -7,7 +7,7 @@ const {
   BAD_DATA_ERR_MESSAGE,
   CARD_NOT_FOUND_ERR_MESSAGE,
   FORBIDDEN_ERR_MESSAGE,
-  BAD_DEL_DATA_MESSAGE,
+  BAD_DELETE_DATA_ERR_MESSAGE,
   CARD_DELETE_MESSAGE,
 } = require('../utils/const');
 
@@ -48,7 +48,7 @@ module.exports.deleteMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError(BAD_DEL_DATA_MESSAGE));
+        next(new BadRequestError(BAD_DELETE_DATA_ERR_MESSAGE));
       } else {
         next(err);
       }

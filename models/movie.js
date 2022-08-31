@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const isUrl = require('validator/lib/isURL');
+const { WRONG_URL } = require('../utils/const');
 
 const movieSchema = new Schema(
   {
@@ -26,17 +27,17 @@ const movieSchema = new Schema(
     image: {
       type: String,
       required: true,
-      validate: [isUrl, 'Неверный формат ссылки'],
+      validate: [isUrl, WRONG_URL],
     },
     trailerLink: {
       type: String,
       required: true,
-      validate: [isUrl, 'Неверный формат ссылки'],
+      validate: [isUrl, WRONG_URL],
     },
     thumbnail: {
       type: String,
       required: true,
-      validate: [isUrl, 'Неверный формат ссылки'],
+      validate: [isUrl, WRONG_URL],
     },
     owner: {
       type: Schema.Types.ObjectId,

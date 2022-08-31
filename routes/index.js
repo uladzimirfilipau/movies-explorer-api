@@ -5,6 +5,7 @@ const { createUser, login } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 
 const NotFoundError = require('../errors/NotFoundError');
+const { NOT_FOUND_ERR_MESSAGE } = require('../utils/const');
 const { validateCreateUser, validateLogin } = require('../middlewares/validate');
 
 router.post('/signup', validateCreateUser, createUser);
@@ -15,7 +16,7 @@ router.use('/users', userRouter);
 router.use('/movies', movieRouter);
 
 router.use((req, res, next) => {
-  next(new NotFoundError('Страница по указанному маршруту не найдена'));
+  next(new NotFoundError(NOT_FOUND_ERR_MESSAGE));
 });
 
 module.exports = router;
