@@ -1,6 +1,5 @@
 const allowedCors = [
-  'https://moviesexplorer.vova.nomoredomains.sbs',
-  'http://moviesexplorer.vova.nomoredomains.sbs',
+  'https://movie-explorer-vova.netlify.app/',
   'http://localhost:3000',
 ];
 
