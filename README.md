@@ -1,70 +1,67 @@
-# Бэкенд дипломного проекта
+# Backend of the graduation project
 
-Проект сделан в рамках обучения в Яндекс Практикуме.
+## Server operation is implemented:
+- registration and authorization of users;
+- token verification;
+- create and delete movie cards.
 
-## Реализована работа сервера:
-- регистрация и авторизация пользователей;
-- проверка токена;
-- создание и удаление карточек фильмов.
-
-## Технологии
+## Technologies
 `Express.js` `Mongo DB`
 
-## Директории
-`/models` — папка с файлами описания схем пользователя и карточки;  
-`/controllers` — папка с файлами контроллеров пользователя и карточки;  
-`/routes` — папка с файлами роутера;  
-`/middlewares` — папка c middleware: auth, cors, limiter, logger, validate;  
-`/errors` — папка с классами ошибок.  
+## Directories
+`/models` — folder with files describing the user's and cards schemes;  
+`/controllers` — folder with the files of the user's and the card controllers;  
+`/routes` — folder with router files;  
+`/middleware` — folder with middleware: auth, cors, limiter, logger, validate;  
+`/errors` — folder with error classes.  
 
-## Роуты
-`POST /signup` — создаёт пользователя с переданными в теле email, password и name;  
-`POST /signin` — проверяет переданные в теле почту и пароль, а затем возвращает JWT;  
-`GET /users/me` — возвращает информацию о пользователе (email и имя);  
-`PATCH /users/me` — обновляет информацию о пользователе (email и имя);  
-`GET /movies` — возвращает все сохранённые текущим  пользователем фильмы;  
-`POST /movies` — создаёт фильм с переданными в теле данными;  
-`DELETE /movies/:movieId` — удаляет сохранённый фильм по id.  
+## Routes
+`POST /signup` — creates a user with the email, password and name passed in the body;  
+`POST /signin` — checks the mail and password passed in the body, and then returns JWT;  
+`GET /users/me` — returns information about the user (email and name);  
+`PATCH /users/me` — updates user information (email and name);  
+`GET /movies` — returns all movies saved by the current user;  
+`POST /movies` — creates a movie with the data transmitted in the body;  
+`DELETE /movies/:movieID` — deletes the saved movie by id.  
 
-## Авторизация и регистрация пользователя
-- В схеме пользователя есть обязательные поля email и password;
-- Поле email уникальное — есть опция unique: true;
-- Поле password не ограничено в длину, так как пароль хранится в виде хеша;
-- В контроллере createUser почта и хеш пароля записываются в базу;
-- Контроллер login проверяет полученные в теле запроса почту и пароль;
-- Если почта и пароль верные, контроллер login создаёт JWT, в payload которого записано свойство _id с идентификатором пользователя;
-- JWT-токен выпускается на срок 7 дней, а не даётся бессрочно;
-- В ответ на успешную авторизацию контроллер login возвращает клиенту созданный токен;
-- В файле middlewares/auth.js middleware авторизации для проверки JWT;
-- Пользователь не может удалить карточку, которую он не создавал;
-- Пользователь не может редактировать чужой профиль;
-- API не возвращает хеш пароля;
-- Все роуты, кроме /signin и /signup защищены авторизацией.
+## User authorization and registration
+- There are mandatory email and password fields in the user schema;
+- The email field is unique — there is an option unique: true;
+- The password field is not limited in length, since the password is stored as a hash;
+- In the createUser controller, the mail and password hash are written to the database;
+- The login controller checks the email and password received in the request body;
+- If the mail and password are correct, the login controller creates a JWT, in the payload of which the id-property with the user ID is written;
+- The JWT token  is not given indefinitely, it is issued for a period of 7 days;
+- In response to successful authorization, the login controller returns the created token to the client;
+- In the file middlewares/auth.js middleware authorization for JWT verification;
+- The user cannot delete a card that he did not create;
+- The user cannot edit someone else's profile;
+- The API does not return a password hash;
+- All routers except /signin and /signup are protected by authorization.
 
-## Валидация данных
-- Поле email пользователя валидируется на соответствие паттерну почты;
-- Тела запросов и, где необходимо, параметры запроса и заголовки валидируются по определённым схемам с помощью celebrate;
-- Если запрос не соответствует схеме, обработка не передаётся контроллеру, клиент получает ошибку валидации;
+## Data validation
+- The user's email field is validated to match the mail pattern;
+- Request bodies and, where necessary, request parameters and headers are validated according to certain schemes using celebrate;
+- If the request does not match the scheme, processing is not transmitted to the controller, the client receives a validation error;
 
-## Обработка ошибок в приложении
-Для ошибок созданы классы конструкторы ошибок, наследуемые от Error.
-Если в любом из запросов что-то идёт не так, сервер возвращает ответ с ошибкой и соответствующим ей статусом:
+## Error handling in the application
+If something goes wrong in any of the requests, the server returns an error response with the corresponding status:
 
-`400` — переданы некорректные данные в методы создания карточки, пользователя или обновления профиля;  
-`401` — передан неверный логин или пароль. Также эту ошибку возвращает авторизационный middleware, если передан неверный JWT;  
-`403` — попытка удалить чужую карточку;  
-`404` — карточка или пользователь не найден или был запрошен несуществующий роут;  
-`409` — при регистрации указан email, который уже существует на сервере;  
-`500` — ошибка по умолчанию. Сопровождается сообщением: «На сервере произошла ошибка».  
+`400` — incorrect data was transmitted to the methods of creating a card, user, or profile update;  
+`401` — invalid username or password was passed. Also, the authorization middleware returns this error if an invalid JWT is passed;  
+`403` — attempt to delete someone else's card;  
+`404` — card or user not found or a non-existent router was requested;  
+`409` — when registering, an email address is specified that already exists on the server;  
+`500` — is the default error. It is accompanied by the message: "An error occurred on the server."  
 
-При обработке ошибки в блоке catch они не выбрасываются через throw, а передаются в централизованный обработчик ошибок с помощью next.
+When processing errors in the catch block, they are passed to a centralized error handler using next.
 
-## Сбор логов
-- Все запросы и ответы записываются в файл request.log;
-- Все ошибки записываются в файл error.log;
-- Файлы логов не добавляются в репозиторий.
+## Collecting logs
+- All requests and responses are recorded in the request.log file;
+- All errors are recorded in the error.log file;
+- Log files are not added to the repository.
 
-## Запуск проекта
-- Клонировать репозиторий: `git clone https://github.com/uladzimirfilipau/movies-explorer-api.git`  
-- Установить зависимости в корневой директории проекта с помощью команды: `npm i` 
-- Запустить backend часть приложения на 3001 порту: `npm start`
+## Project launch
+- Clone repository: `git clone https://github.com/uladzimirfilipau/movies-explorer-api.git `  
+- Install dependencies in the root directory of the project using the command: `npm i` 
+- Run the backend part of the application on port 3001: `npm start`
