@@ -2,8 +2,8 @@ const {
   NODE_ENV = 'dev',
   JWT_SECRET = 'dev-secret',
   SALT = 10,
-  PORT = process.env.PORT || 3001,
-  MONGODB = 'mongodb+srv://ulfi:lQEF8JvuqAX0yAWV@cluster0.ozqtuja.mongodb.net/?retryWrites=true&w=majority',
+  PORT = 3001,
+  MONGODB = 'mongodb://localhost:27017/mestodb',
 } = process.env;
 
 module.exports = {
