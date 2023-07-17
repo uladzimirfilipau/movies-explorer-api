@@ -1,5 +1,5 @@
 const allowedCors = [
-  'https://movie-explorer-ulfi.netlify.app',
+  'https://movies-explorer-ulfi.netlify.app',
   'http://localhost:3000',
 ];
 
